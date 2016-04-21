@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextAppearance"/>
+
+    <style name="TextAppearance.Currency" parent="TextAppearance.AppCompat.Body1"></style>
+
+    <style name="TextAppearance.Currency.Link">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
 </resources>
