@@ -8,11 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.neaniesoft.concurrency.R;
+import com.neaniesoft.concurrency.model.Currency;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ConversionFragment extends Fragment {
+public class ConversionFragment extends Fragment implements ConversionContract.View {
 
 
     public ConversionFragment() {
@@ -27,4 +30,28 @@ public class ConversionFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_conversion, container, false);
     }
 
+    @Override
+    public void showResult(String result) {
+
+    }
+
+    @Override
+    public void setFromCurrencyDisplay(Currency from) {
+
+    }
+
+    @Override
+    public void setToCurrencyDisplay(Currency to) {
+
+    }
+
+    @Override
+    public void setFromCurrencyList(List<Currency> currencyList) {
+
+    }
+
+    @Override
+    public void setToCurrencyList(List<Currency> currencyList) {
+
+    }
 }
