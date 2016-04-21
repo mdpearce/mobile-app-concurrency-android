@@ -1,4 +1,4 @@
-package com.neaniesoft.currentlyconvert;
+package com.neaniesoft.concurrency;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

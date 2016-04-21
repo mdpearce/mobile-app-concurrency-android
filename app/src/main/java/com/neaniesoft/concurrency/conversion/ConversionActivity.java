@@ -1,9 +1,9 @@
-package com.neaniesoft.currentlyconvert.conversion;
+package com.neaniesoft.concurrency.conversion;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.neaniesoft.currentlyconvert.R;
+import com.neaniesoft.concurrency.R;
 
 public class ConversionActivity extends AppCompatActivity {
 

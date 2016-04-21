@@ -1,4 +1,4 @@
-package com.neaniesoft.currentlyconvert.model;
+package com.neaniesoft.concurrency.model;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;

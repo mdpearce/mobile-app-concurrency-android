@@ -1,4 +1,4 @@
-package com.neaniesoft.currentlyconvert.conversion;
+package com.neaniesoft.concurrency.conversion;
 
 
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.neaniesoft.currentlyconvert.R;
+import com.neaniesoft.concurrency.R;
 
 /**
  * A simple {@link Fragment} subclass.

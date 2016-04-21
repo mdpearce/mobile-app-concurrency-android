@@ -13,7 +13,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.neaniesoft.currentlyconvert.conversion.ConversionFragment"
+        android:name="com.neaniesoft.concurrency.conversion.ConversionFragment"
         android:id="@+id/fragment_conversion"
         tools:layout="@layout/fragment_conversion"/>
 </FrameLayout>

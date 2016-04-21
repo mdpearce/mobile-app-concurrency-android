@@ -1,6 +1,6 @@
-package com.neaniesoft.currentlyconvert.conversion;
+package com.neaniesoft.concurrency.conversion;
 
-import com.neaniesoft.currentlyconvert.model.Currency;
+import com.neaniesoft.concurrency.model.Currency;
 
 /**
  * Created by mdpearce on 21/04/16.
