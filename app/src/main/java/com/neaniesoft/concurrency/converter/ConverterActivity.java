@@ -1,10 +1,12 @@
-package com.neaniesoft.concurrency;
+package com.neaniesoft.concurrency.converter;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.neaniesoft.concurrency.R;
 
 public class ConverterActivity extends AppCompatActivity {
 
