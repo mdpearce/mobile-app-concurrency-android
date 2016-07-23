@@ -1,0 +1,28 @@
+package com.neaniesoft.concurrency.data.remote;
+
+import com.neaniesoft.concurrency.data.Currency;
+
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ * Created by mdpearce on 23/07/2016.
+ */
+
+public class FixerIOResponse {
+    String base;
+    Calendar date;
+    List<Currency> rates;
+
+    public String getBase() {
+        return base;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public List<Currency> getRates() {
+        return rates;
+    }
+}
