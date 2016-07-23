@@ -7,6 +7,9 @@ import com.google.gson.GsonBuilder;
 import com.neaniesoft.concurrency.data.CurrenciesDataSource;
 import com.neaniesoft.concurrency.data.Currency;
 
+import java.util.Date;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,7 +57,7 @@ public class CurrenciesRemoteDataSource implements CurrenciesDataSource {
             public void onResponse(Call<FixerIOResponse> call, Response<FixerIOResponse> response) {
                 if (response != null && response.isSuccessful()) {
                     FixerIOResponse fixerIOResponse = response.body();
-                    callback.onCurrenciesLoaded(fixerIOResponse.getRates(), fixerIOResponse.getDate());
+                    callback.onCurrenciesLoaded(fixerIOResponse.getRates(), new Date());
                 }
             }
 
@@ -67,7 +70,12 @@ public class CurrenciesRemoteDataSource implements CurrenciesDataSource {
     }
 
     @Override
-    public void saveCurrency(@NonNull Currency currency) {
+    public void saveCurrencies(@NonNull List<Currency> currencies) {
         // Not needed for remote read-only repo
+    }
+
+    @Override
+    public void refreshCurrencies() {
+        // Not required
     }
 }

@@ -11,14 +11,9 @@ import android.support.annotation.NonNull;
 import com.neaniesoft.concurrency.data.CurrenciesDataSource;
 import com.neaniesoft.concurrency.data.Currency;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -34,9 +29,6 @@ public class CurrenciesLocalDataSource implements CurrenciesDataSource {
     private CurrenciesDbHelper mDbHelper;
 
     private SharedPreferences mPreferences;
-
-    private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
 
     private CurrenciesLocalDataSource(@NonNull Context context) {
         checkNotNull(context);
@@ -86,19 +78,7 @@ public class CurrenciesLocalDataSource implements CurrenciesDataSource {
 
         db.close();
 
-        String fetchedDateString = mPreferences.getString(PREF_FETCHED_DATE, null);
-        Calendar fetchedDate = null;
-        if (fetchedDateString != null) {
-            Date date = null;
-            try {
-                date = mDateFormat.parse(fetchedDateString);
-            } catch (ParseException e) {
-            }
-            if (date != null) {
-                fetchedDate = Calendar.getInstance();
-                fetchedDate.setTime(date);
-            }
-        }
+        Date fetchedDate = new Date(mPreferences.getLong(PREF_FETCHED_DATE, 0));
 
         if (currencies.isEmpty()) {
             callback.onDataNotAvailable();
@@ -108,16 +88,32 @@ public class CurrenciesLocalDataSource implements CurrenciesDataSource {
     }
 
     @Override
-    public void saveCurrency(@NonNull Currency currency) {
-        checkNotNull(currency);
+    public void saveCurrencies(@NonNull List<Currency> currencies) {
+        checkNotNull(currencies);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(CurrenciesPersistenceContract.CurrencyEntry._ID, currency.getCode());
-        values.put(CurrenciesPersistenceContract.CurrencyEntry.COLUMN_RATE, currency.getRate());
+        db.beginTransaction();
+        try {
+            for (Currency currency : currencies) {
+                ContentValues values = new ContentValues();
+                values.put(CurrenciesPersistenceContract.CurrencyEntry._ID, currency.getCode());
+                values.put(CurrenciesPersistenceContract.CurrencyEntry.COLUMN_RATE, currency.getRate());
 
-        db.replace(CurrenciesPersistenceContract.CurrencyEntry.TABLE_NAME, null, values);
+                db.replace(CurrenciesPersistenceContract.CurrencyEntry.TABLE_NAME, null, values);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
 
         db.close();
+
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putLong(PREF_FETCHED_DATE, System.currentTimeMillis());
+    }
+
+    @Override
+    public void refreshCurrencies() {
+        // Not required
     }
 }
