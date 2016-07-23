@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/content_converter"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.neaniesoft.concurrency.ConverterActivityFragment"
+    tools:showIn="@layout/activity_converter">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="@+id/content_converter"
+        app:layout_constraintLeft_toLeftOf="@+id/content_converter"
+        app:layout_constraintRight_toRightOf="@+id/content_converter"
+        app:layout_constraintTop_toTopOf="@+id/content_converter"/>
+
+</android.support.constraint.ConstraintLayout>
