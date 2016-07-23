@@ -2,6 +2,7 @@ package com.neaniesoft.concurrency.data;
 
 import android.support.annotation.NonNull;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
 
 public interface CurrenciesDataSource {
     interface LoadCurrenciesCallback {
-        void onCurrenciesLoaded(List<Currency> currencies);
+        void onCurrenciesLoaded(List<Currency> currencies, Calendar date);
 
         void onDataNotAvailable();
     }
