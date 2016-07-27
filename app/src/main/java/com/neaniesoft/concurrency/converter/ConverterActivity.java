@@ -6,9 +6,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.neaniesoft.concurrency.Injection;
 import com.neaniesoft.concurrency.R;
 
 public class ConverterActivity extends AppCompatActivity {
+
+    private ConverterContract.Presenter mConverterPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +19,21 @@ public class ConverterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_converter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ConverterFragment converterFragment = (ConverterFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment);
+        if (converterFragment == null) {
+            converterFragment = ConverterFragment.newInstance();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment, converterFragment)
+                    .commit();
+        }
+
+        mConverterPresenter = new ConverterPresenter(
+                converterFragment,
+                Injection.provideCurrenciesRepository(getApplicationContext()));
+
     }
 
     @Override
