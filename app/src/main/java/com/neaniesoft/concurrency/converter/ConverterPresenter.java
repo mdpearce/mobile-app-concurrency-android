@@ -8,6 +8,8 @@ import com.neaniesoft.concurrency.data.Currency;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -19,10 +21,12 @@ public class ConverterPresenter implements ConverterContract.Presenter {
 
     private final ConverterContract.View mConverterView;
     private final CurrenciesRepository mCurrenciesRepository;
+    private final Map<String, String> mCurrenciesMap;
 
-    public ConverterPresenter(@NonNull ConverterContract.View converterView, @NonNull CurrenciesRepository currenciesRepository) {
+    public ConverterPresenter(@NonNull ConverterContract.View converterView, @NonNull CurrenciesRepository currenciesRepository, @NonNull Map<String, String> currenciesMap) {
         mConverterView = checkNotNull(converterView);
         mCurrenciesRepository = checkNotNull(currenciesRepository);
+        mCurrenciesMap = checkNotNull(currenciesMap);
 
         mConverterView.setPresenter(this);
     }
@@ -38,30 +42,45 @@ public class ConverterPresenter implements ConverterContract.Presenter {
                 if (currencies == null || currencies.isEmpty()) {
                     mConverterView.showNoCurrenciesError();
                 } else {
-                    mConverterView.setAvailableCurrencies(currencies);
+                    mConverterView.setAvailableCurrencies(currencies, mCurrenciesMap);
                 }
             }
 
             @Override
             public void onDataNotAvailable() {
-
+                mConverterView.showNoCurrenciesError();
             }
         });
     }
 
     @Override
     public void fromAmountChanged() {
-
+        calculate();
     }
 
     @Override
-    public void fromCurrencyChanged(@NonNull Currency fromCurrency) {
-
+    public void fromCurrencyChanged() {
+        calculate();
     }
 
     @Override
-    public void toCurrencyChanged(@NonNull Currency toCurrency) {
+    public void toCurrencyChanged() {
+        calculate();
+    }
 
+    private void calculate() {
+        double fromRate = mConverterView.getFromCurrency().getRate();
+        double toRate = mConverterView.getToCurrency().getRate();
+
+        double amount = 0;
+        try {
+            amount = Double.valueOf(mConverterView.getFromText());
+        } catch (NumberFormatException e) {
+        }
+
+        double converted = (amount / fromRate) * toRate;
+        String convertedString = String.format(Locale.getDefault(), "%.2f", converted);
+        mConverterView.updateToAmount(convertedString);
     }
 
     @Override

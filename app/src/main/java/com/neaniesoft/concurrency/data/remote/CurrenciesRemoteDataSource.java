@@ -10,6 +10,8 @@ import com.neaniesoft.concurrency.data.Currency;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +42,13 @@ public class CurrenciesRemoteDataSource implements CurrenciesDataSource {
                 .registerTypeAdapter(RatesDeserializer.class, new RatesDeserializer())
                 .create();
         GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(gson);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(
+                        new HttpLoggingInterceptor()
+                                .setLevel(HttpLoggingInterceptor.Level.BODY))
+                .build();
         Retrofit retrofit = new Retrofit.Builder()
+                .client(client)
                 .addConverterFactory(gsonConverterFactory)
                 .baseUrl(FixerIOService.BASEURL)
                 .build();
@@ -57,7 +65,9 @@ public class CurrenciesRemoteDataSource implements CurrenciesDataSource {
             public void onResponse(Call<FixerIOResponse> call, Response<FixerIOResponse> response) {
                 if (response != null && response.isSuccessful()) {
                     FixerIOResponse fixerIOResponse = response.body();
-                    callback.onCurrenciesLoaded(fixerIOResponse.getRates(), new Date());
+                    List<Currency> currencies = fixerIOResponse.getRates();
+                    currencies.add(new Currency("USD", 1)); // Base currency which is not included in the api response
+                    callback.onCurrenciesLoaded(currencies, new Date());
                 }
             }
 

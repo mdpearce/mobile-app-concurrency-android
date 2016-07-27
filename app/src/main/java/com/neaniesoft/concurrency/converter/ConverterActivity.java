@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import com.neaniesoft.concurrency.Injection;
 import com.neaniesoft.concurrency.R;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ConverterActivity extends AppCompatActivity {
 
     private ConverterContract.Presenter mConverterPresenter;
@@ -32,7 +35,8 @@ public class ConverterActivity extends AppCompatActivity {
 
         mConverterPresenter = new ConverterPresenter(
                 converterFragment,
-                Injection.provideCurrenciesRepository(getApplicationContext()));
+                Injection.provideCurrenciesRepository(getApplicationContext()),
+                getCurrenciesMap());
 
     }
 
@@ -56,5 +60,21 @@ public class ConverterActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Map<String,String> getCurrenciesMap() {
+        String[] codes = getResources().getStringArray(R.array.currency_codes);
+        String[] names = getResources().getStringArray(R.array.currency_names);
+
+        if (codes.length != names.length) {
+            throw new IllegalStateException("Codes array does not match names!");
+        }
+
+        Map<String, String> currenciesMap = new HashMap<>(codes.length);
+        for (int i = 0; i < codes.length; i++) {
+            currenciesMap.put(codes[i], names[i]);
+        }
+
+        return currenciesMap;
     }
 }

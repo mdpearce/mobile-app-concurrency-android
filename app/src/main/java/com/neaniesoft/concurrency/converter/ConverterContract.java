@@ -1,12 +1,11 @@
 package com.neaniesoft.concurrency.converter;
 
-import android.support.annotation.NonNull;
-
 import com.neaniesoft.concurrency.BasePresenter;
 import com.neaniesoft.concurrency.BaseView;
 import com.neaniesoft.concurrency.data.Currency;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mdpearce on 23/07/2016.
@@ -24,7 +23,11 @@ public interface ConverterContract {
 
         void showNoCurrenciesError();
 
-        void setAvailableCurrencies(List<Currency> currencies);
+        void setAvailableCurrencies(List<Currency> currencies, Map<String, String> currenciesMap);
+
+        Currency getFromCurrency();
+
+        Currency getToCurrency();
     }
 
     interface Presenter extends BasePresenter {
@@ -32,8 +35,8 @@ public interface ConverterContract {
 
         void fromAmountChanged();
 
-        void fromCurrencyChanged(@NonNull Currency fromCurrency);
+        void fromCurrencyChanged();
 
-        void toCurrencyChanged(@NonNull Currency toCurrency);
+        void toCurrencyChanged();
     }
 }
