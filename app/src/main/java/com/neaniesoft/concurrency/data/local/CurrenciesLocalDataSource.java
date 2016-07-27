@@ -109,7 +109,7 @@ public class CurrenciesLocalDataSource implements CurrenciesDataSource {
         db.close();
 
         SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(PREF_FETCHED_DATE, System.currentTimeMillis());
+        editor.putLong(PREF_FETCHED_DATE, System.currentTimeMillis()).apply();
     }
 
     @Override
