@@ -39,7 +39,7 @@ public class CurrenciesRemoteDataSource implements CurrenciesDataSource {
 
     private CurrenciesRemoteDataSource() {
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(RatesDeserializer.class, new RatesDeserializer())
+                .registerTypeAdapter(FixerIOResponse.class, new RatesDeserializer())
                 .create();
         GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(gson);
         OkHttpClient client = new OkHttpClient.Builder()

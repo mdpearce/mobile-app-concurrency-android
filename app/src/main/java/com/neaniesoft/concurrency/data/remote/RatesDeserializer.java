@@ -18,36 +18,45 @@ import java.util.Set;
  * Created by mdpearce on 23/07/2016.
  */
 
-public class RatesDeserializer implements JsonDeserializer<List<Currency>> {
+public class RatesDeserializer implements JsonDeserializer<FixerIOResponse> {
 
     @Override
-    public List<Currency> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public FixerIOResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
-        if (!json.isJsonObject() && !json.isJsonArray()) {
+        if (!json.isJsonObject()) {
             return null;
         }
 
-        List<Currency> currencies = new ArrayList<>();
+        FixerIOResponse response = new FixerIOResponse();
 
-        JsonObject jsonObject = json.getAsJsonObject();
-        Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
-
-        for (Map.Entry<String, JsonElement> entry : entries) {
-            String code = entry.getKey();
-            double rate = 0;
-
-            JsonElement value = entry.getValue();
-            if (value != null && value.isJsonPrimitive()) {
-                JsonPrimitive primitive = value.getAsJsonPrimitive();
-                if (primitive.isNumber()) {
-                    rate = primitive.getAsDouble();
-                }
-            }
-
-            Currency currency = new Currency(code, rate);
-            currencies.add(currency);
+        JsonElement baseElement = json.getAsJsonObject().get("base");
+        if (baseElement != null && baseElement.isJsonPrimitive()) {
+            response.base = baseElement.getAsString();
         }
 
-        return currencies;
+        JsonElement ratesElement = json.getAsJsonObject().get("rates");
+        if (ratesElement != null && ratesElement.isJsonObject()) {
+            List<Currency> currencies = new ArrayList<>();
+            JsonObject ratesObject = ratesElement.getAsJsonObject();
+            Set<Map.Entry<String, JsonElement>> entries = ratesObject.entrySet();
+
+            for (Map.Entry<String, JsonElement> entry : entries) {
+                String code = entry.getKey();
+                double rate = 0;
+
+                JsonElement value = entry.getValue();
+                if (value != null && value.isJsonPrimitive()) {
+                    JsonPrimitive primitive = value.getAsJsonPrimitive();
+                    if (primitive.isNumber()) {
+                        rate = primitive.getAsDouble();
+                    }
+                }
+
+                Currency currency = new Currency(code, rate);
+                currencies.add(currency);
+            }
+            response.rates = currencies;
+        }
+        return response;
     }
 }
