@@ -28,6 +28,10 @@ public interface ConverterContract {
         Currency getFromCurrency();
 
         Currency getToCurrency();
+
+        void setSelectedFromCurrency(Currency currency);
+
+        void setSelectedToCurrency(Currency currency);
     }
 
     interface Presenter extends BasePresenter {

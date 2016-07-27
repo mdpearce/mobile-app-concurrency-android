@@ -137,11 +137,13 @@ public class ConverterFragment extends Fragment implements ConverterContract.Vie
     public void setAvailableCurrencies(List<Currency> currencies, Map<String, String> currenciesMap) {
         if (mAdapterCurrenciesFrom == null) {
             mAdapterCurrenciesFrom = new CurrencyAdapter(currencies, currenciesMap);
+            spinnerFromCurrency.setAdapter(mAdapterCurrenciesFrom);
         } else {
             mAdapterCurrenciesFrom.replaceData(currencies);
         }
         if (mAdapterCurrenciesTo == null) {
             mAdapterCurrenciesTo = new CurrencyAdapter(currencies, currenciesMap);
+            spinnerToCurrency.setAdapter(mAdapterCurrenciesTo);
         } else {
             mAdapterCurrenciesTo.replaceData(currencies);
         }
@@ -155,6 +157,16 @@ public class ConverterFragment extends Fragment implements ConverterContract.Vie
     @Override
     public Currency getToCurrency() {
         return (Currency) spinnerToCurrency.getItemAtPosition(spinnerToCurrency.getSelectedItemPosition());
+    }
+
+    @Override
+    public void setSelectedFromCurrency(Currency currency) {
+        spinnerFromCurrency.setSelection(mAdapterCurrenciesFrom.getPositionForCurrency(currency));
+    }
+
+    @Override
+    public void setSelectedToCurrency(Currency currency) {
+        spinnerToCurrency.setSelection(mAdapterCurrenciesTo.getPositionForCurrency(currency));
     }
 
     @Override
@@ -223,6 +235,16 @@ public class ConverterFragment extends Fragment implements ConverterContract.Vie
 
             title.setText(mCurrencyNames.get(currency.getCode()));
             return view;
+        }
+
+        public int getPositionForCurrency(Currency currency) {
+            for (int i = 0; i < mCurrencies.size(); i++) {
+                Currency checkCurrency = mCurrencies.get(i);
+                if (checkCurrency.equalsCode(currency)) {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 }

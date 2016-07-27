@@ -2,6 +2,7 @@ package com.neaniesoft.concurrency.converter;
 
 import android.support.annotation.NonNull;
 
+import com.neaniesoft.concurrency.Prefs;
 import com.neaniesoft.concurrency.data.CurrenciesDataSource;
 import com.neaniesoft.concurrency.data.CurrenciesRepository;
 import com.neaniesoft.concurrency.data.Currency;
@@ -43,6 +44,7 @@ public class ConverterPresenter implements ConverterContract.Presenter {
                     mConverterView.showNoCurrenciesError();
                 } else {
                     mConverterView.setAvailableCurrencies(currencies, mCurrenciesMap);
+                    setSelectedCurrencies(currencies);
                 }
             }
 
@@ -53,6 +55,24 @@ public class ConverterPresenter implements ConverterContract.Presenter {
         });
     }
 
+    private void setSelectedCurrencies(List<Currency> currencies) {
+        String selectedFromCode = Prefs.getInstance().getFromCurrencyCode();
+        for (Currency currency : currencies) {
+            if (currency.getCode().equalsIgnoreCase(selectedFromCode)) {
+                mConverterView.setSelectedFromCurrency(currency);
+                break;
+            }
+        }
+
+        String selectedToCode = Prefs.getInstance().getToCurrencyCode();
+        for (Currency currency : currencies) {
+            if (currency.getCode().equalsIgnoreCase(selectedToCode)) {
+                mConverterView.setSelectedToCurrency(currency);
+                break;
+            }
+        }
+    }
+
     @Override
     public void fromAmountChanged() {
         calculate();
@@ -60,11 +80,13 @@ public class ConverterPresenter implements ConverterContract.Presenter {
 
     @Override
     public void fromCurrencyChanged() {
+        saveFromCurrency(mConverterView.getFromCurrency());
         calculate();
     }
 
     @Override
     public void toCurrencyChanged() {
+        saveToCurrency(mConverterView.getToCurrency());
         calculate();
     }
 
@@ -86,5 +108,13 @@ public class ConverterPresenter implements ConverterContract.Presenter {
     @Override
     public void start() {
         loadCurrencies();
+    }
+
+    private void saveFromCurrency(Currency currency) {
+        Prefs.getInstance().setFromCurrency(currency);
+    }
+
+    private void saveToCurrency(Currency currency) {
+        Prefs.getInstance().setToCurrency(currency);
     }
 }
