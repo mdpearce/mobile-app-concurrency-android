@@ -7,10 +7,14 @@ import com.neaniesoft.concurrency.data.CurrenciesDataSource;
 import com.neaniesoft.concurrency.data.CurrenciesRepository;
 import com.neaniesoft.concurrency.data.Currency;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -24,10 +28,14 @@ public class ConverterPresenter implements ConverterContract.Presenter {
     private final CurrenciesRepository mCurrenciesRepository;
     private final Map<String, String> mCurrenciesMap;
 
+    private final Pattern mDecimalParsePattern;
+
     public ConverterPresenter(@NonNull ConverterContract.View converterView, @NonNull CurrenciesRepository currenciesRepository, @NonNull Map<String, String> currenciesMap) {
         mConverterView = checkNotNull(converterView);
         mCurrenciesRepository = checkNotNull(currenciesRepository);
         mCurrenciesMap = checkNotNull(currenciesMap);
+
+        mDecimalParsePattern = Pattern.compile("^\\D*(\\d[\\d ,]*(?:\\.\\d+)?)");
 
         mConverterView.setPresenter(this);
     }
@@ -73,32 +81,59 @@ public class ConverterPresenter implements ConverterContract.Presenter {
         }
     }
 
-    @Override
-    public void fromAmountChanged() {
-        calculate();
-    }
-
-    @Override
-    public void fromCurrencyChanged() {
-        saveFromCurrency(mConverterView.getFromCurrency());
-        calculate();
-    }
-
-    @Override
-    public void toCurrencyChanged() {
-        saveToCurrency(mConverterView.getToCurrency());
-        calculate();
-    }
-
-    private void calculate() {
-        double fromRate = mConverterView.getFromCurrency().getRate();
-        double toRate = mConverterView.getToCurrency().getRate();
-
+    private double getAmountFromView() {
         double amount = 0;
         try {
             amount = Double.valueOf(mConverterView.getFromText());
         } catch (NumberFormatException e) {
         }
+        return amount;
+    }
+
+    @Override
+    public void fromAmountChanged() {
+        calculate(getAmountFromView());
+    }
+
+    @Override
+    public void fromCurrencyChanged() {
+        saveFromCurrency(mConverterView.getFromCurrency());
+        calculate(getAmountFromView());
+    }
+
+    @Override
+    public void toCurrencyChanged() {
+        saveToCurrency(mConverterView.getToCurrency());
+        calculate(getAmountFromView());
+    }
+
+    @Override
+    public void handleSharedText(String sharedText) {
+        double value = parseNumberFromString(sharedText);
+        mConverterView.setFromAmount(String.valueOf(value));
+    }
+
+    double parseNumberFromString(String text) {
+        if (text == null) {
+            return 0;
+        }
+        Matcher matcher = mDecimalParsePattern.matcher(text);
+        if (matcher.matches()) {
+            String numberString = matcher.group(1).replace(" ", "");
+            NumberFormat nf = NumberFormat.getNumberInstance();
+            try {
+                Number number = nf.parse(numberString);
+                return number.doubleValue();
+            } catch (ParseException e) {
+            }
+        }
+        return 0;
+
+    }
+
+    private void calculate(double amount) {
+        double fromRate = mConverterView.getFromCurrency().getRate();
+        double toRate = mConverterView.getToCurrency().getRate();
 
         double converted = (amount / fromRate) * toRate;
         String convertedString = String.format(Locale.getDefault(), "%.2f", converted);

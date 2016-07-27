@@ -50,11 +50,17 @@ public class ConverterFragment extends Fragment implements ConverterContract.Vie
     CurrencyAdapter mAdapterCurrenciesFrom;
     CurrencyAdapter mAdapterCurrenciesTo;
 
+    private static final String KEY_INITIAL_TEXT = "com.neaniesoft.concurrency.converter.INITIAL_TEXT";
+
     public ConverterFragment() {
     }
 
-    public static ConverterFragment newInstance() {
-        return new ConverterFragment();
+    public static ConverterFragment newInstance(String initialText) {
+        ConverterFragment fragment = new ConverterFragment();
+        Bundle args = new Bundle();
+        args.putString(KEY_INITIAL_TEXT, initialText);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -95,6 +101,13 @@ public class ConverterFragment extends Fragment implements ConverterContract.Vie
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPresenter.start();
+        Bundle args = getArguments();
+        if (args != null) {
+            String initialText = args.getString(KEY_INITIAL_TEXT, null);
+            if (initialText != null) {
+                mPresenter.handleSharedText(initialText);
+            }
+        }
     }
 
     @Override
@@ -151,11 +164,17 @@ public class ConverterFragment extends Fragment implements ConverterContract.Vie
 
     @Override
     public Currency getFromCurrency() {
+        if (spinnerFromCurrency == null) {
+            return new Currency("", 1);
+        }
         return (Currency) spinnerFromCurrency.getItemAtPosition(spinnerFromCurrency.getSelectedItemPosition());
     }
 
     @Override
     public Currency getToCurrency() {
+        if (spinnerToCurrency == null) {
+            return new Currency("", 1);
+        }
         return (Currency) spinnerToCurrency.getItemAtPosition(spinnerToCurrency.getSelectedItemPosition());
     }
 
@@ -167,6 +186,11 @@ public class ConverterFragment extends Fragment implements ConverterContract.Vie
     @Override
     public void setSelectedToCurrency(Currency currency) {
         spinnerToCurrency.setSelection(mAdapterCurrenciesTo.getPositionForCurrency(currency));
+    }
+
+    @Override
+    public void setFromAmount(String fromAmount) {
+        textFromAmount.setText(fromAmount);
     }
 
     @Override

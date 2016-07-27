@@ -32,6 +32,8 @@ public interface ConverterContract {
         void setSelectedFromCurrency(Currency currency);
 
         void setSelectedToCurrency(Currency currency);
+
+        void setFromAmount(String fromAmount);
     }
 
     interface Presenter extends BasePresenter {
@@ -42,5 +44,7 @@ public interface ConverterContract {
         void fromCurrencyChanged();
 
         void toCurrencyChanged();
+
+        void handleSharedText(String sharedText);
     }
 }

@@ -1,6 +1,8 @@
 package com.neaniesoft.concurrency.converter;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -23,10 +25,12 @@ public class ConverterActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        String initialText = getInitialTextFromIntent(getIntent());
+
         ConverterFragment converterFragment = (ConverterFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment);
         if (converterFragment == null) {
-            converterFragment = ConverterFragment.newInstance();
+            converterFragment = ConverterFragment.newInstance(initialText);
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragment, converterFragment)
@@ -37,6 +41,7 @@ public class ConverterActivity extends AppCompatActivity {
                 converterFragment,
                 Injection.provideCurrenciesRepository(getApplicationContext()),
                 getCurrenciesMap());
+
 
     }
 
@@ -76,5 +81,24 @@ public class ConverterActivity extends AppCompatActivity {
         }
 
         return currenciesMap;
+    }
+
+    private String getInitialTextFromIntent(@NonNull Intent intent) {
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                return intent.getStringExtra(Intent.EXTRA_TEXT);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        String intentText = getInitialTextFromIntent(intent);
+        mConverterPresenter.handleSharedText(intentText);
     }
 }
