@@ -40,7 +40,7 @@
         android:id="@+id/spinner_to_currency"
         app:layout_constraintLeft_toLeftOf="@+id/text_from_amount"
         app:layout_constraintTop_toBottomOf="@+id/text_from_amount"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintRight_toRightOf="@+id/text_from_amount"/>
 
     <TextView
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_to_amount"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         app:layout_constraintLeft_toLeftOf="@+id/content_converter"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
