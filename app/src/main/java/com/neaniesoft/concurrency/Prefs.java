@@ -10,26 +10,10 @@ import com.neaniesoft.concurrency.data.Currency;
  */
 
 public class Prefs {
-    private static Prefs ourInstance;
-
     private static final String KEY_FROM_CURRENCY = "from_currency";
     private static final String KEY_TO_CURRENCY = "to_currency";
 
-    public static Prefs getInstance() {
-        if (ourInstance == null) {
-            ourInstance = getSync();
-        }
-        return ourInstance;
-    }
-
-    private static synchronized Prefs getSync() {
-        if (ourInstance == null) {
-            ourInstance = new Prefs();
-        }
-        return ourInstance;
-    }
-
-    private Prefs() {
+    public Prefs() {
     }
 
     private SharedPreferences prefs() {

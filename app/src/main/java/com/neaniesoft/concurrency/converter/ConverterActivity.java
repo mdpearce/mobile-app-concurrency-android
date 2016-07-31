@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.neaniesoft.concurrency.Injection;
+import com.neaniesoft.concurrency.Prefs;
 import com.neaniesoft.concurrency.R;
 
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class ConverterActivity extends AppCompatActivity {
         mConverterPresenter = new ConverterPresenter(
                 converterFragment,
                 Injection.provideCurrenciesRepository(getApplicationContext()),
+                new Prefs(),
                 getCurrenciesMap());
 
 

@@ -1,5 +1,6 @@
 package com.neaniesoft.concurrency.converter;
 
+import com.neaniesoft.concurrency.Prefs;
 import com.neaniesoft.concurrency.data.CurrenciesDataSource;
 import com.neaniesoft.concurrency.data.CurrenciesRepository;
 import com.neaniesoft.concurrency.data.Currency;
@@ -41,6 +42,9 @@ public class ConverterPresenterTest {
     @Mock
     ConverterContract.View mConverterView;
 
+    @Mock
+    Prefs mPrefs;
+
     @Captor
     private ArgumentCaptor<CurrenciesDataSource.LoadCurrenciesCallback> mLoadCurrenciesCallbackCaptor;
 
@@ -67,7 +71,10 @@ public class ConverterPresenterTest {
         // Always return true for isActive
         when(mConverterView.isActive()).thenReturn(true);
 
-        mConverterPresenter = new ConverterPresenter(mConverterView, mCurrenciesRepository, CURRENCIES_MAP);
+        when(mPrefs.getFromCurrencyCode()).thenReturn("USD");
+        when(mPrefs.getToCurrencyCode()).thenReturn("AUD");
+
+        mConverterPresenter = new ConverterPresenter(mConverterView, mCurrenciesRepository, mPrefs, CURRENCIES_MAP);
     }
 
     @Test
@@ -77,8 +84,23 @@ public class ConverterPresenterTest {
         mLoadCurrenciesCallbackCaptor.getValue().onCurrenciesLoaded(CURRENCIES, DATE);
 
         ArgumentCaptor<List> showCurrenciesArgumentCaptor = ArgumentCaptor.forClass(List.class);
-        verify(mConverterView).setAvailableCurrencies(showCurrenciesArgumentCaptor.capture(), CURRENCIES_MAP);
+        ArgumentCaptor<Map> currenciesMapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(mConverterView).setAvailableCurrencies(showCurrenciesArgumentCaptor.capture(), currenciesMapArgumentCaptor.capture());
         assertTrue(showCurrenciesArgumentCaptor.getValue().size() == 4);
+    }
+
+    @Test
+    public void setSelectedCurrenciesWhenLoadingFromRepository() {
+        mConverterPresenter.loadCurrencies();
+        verify(mCurrenciesRepository).getCurrencies(mLoadCurrenciesCallbackCaptor.capture());
+        mLoadCurrenciesCallbackCaptor.getValue().onCurrenciesLoaded(CURRENCIES, DATE);
+
+        ArgumentCaptor<List> showCurrenciesArgumentCaptor = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<Map> currenciesMapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(mConverterView).setAvailableCurrencies(showCurrenciesArgumentCaptor.capture(), currenciesMapArgumentCaptor.capture());
+
+        verify(mConverterView).setSelectedFromCurrency(CURRENCIES.get(0));
+        verify(mConverterView).setSelectedToCurrency(CURRENCIES.get(1));
     }
 
     @Test

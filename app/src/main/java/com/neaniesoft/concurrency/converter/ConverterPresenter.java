@@ -27,13 +27,15 @@ public class ConverterPresenter implements ConverterContract.Presenter {
     private final ConverterContract.View mConverterView;
     private final CurrenciesRepository mCurrenciesRepository;
     private final Map<String, String> mCurrenciesMap;
+    private final Prefs mPrefs;
 
     private final Pattern mDecimalParsePattern;
 
-    public ConverterPresenter(@NonNull ConverterContract.View converterView, @NonNull CurrenciesRepository currenciesRepository, @NonNull Map<String, String> currenciesMap) {
+    public ConverterPresenter(@NonNull ConverterContract.View converterView, @NonNull CurrenciesRepository currenciesRepository, @NonNull Prefs prefs, @NonNull Map<String, String> currenciesMap) {
         mConverterView = checkNotNull(converterView);
         mCurrenciesRepository = checkNotNull(currenciesRepository);
         mCurrenciesMap = checkNotNull(currenciesMap);
+        mPrefs = checkNotNull(prefs);
 
         mDecimalParsePattern = Pattern.compile("^\\D*(\\d[\\d ,]*(?:\\.\\d+)?)");
 
@@ -64,7 +66,7 @@ public class ConverterPresenter implements ConverterContract.Presenter {
     }
 
     private void setSelectedCurrencies(List<Currency> currencies) {
-        String selectedFromCode = Prefs.getInstance().getFromCurrencyCode();
+        String selectedFromCode = mPrefs.getFromCurrencyCode();
         for (Currency currency : currencies) {
             if (currency.getCode().equalsIgnoreCase(selectedFromCode)) {
                 mConverterView.setSelectedFromCurrency(currency);
@@ -72,7 +74,7 @@ public class ConverterPresenter implements ConverterContract.Presenter {
             }
         }
 
-        String selectedToCode = Prefs.getInstance().getToCurrencyCode();
+        String selectedToCode = mPrefs.getToCurrencyCode();
         for (Currency currency : currencies) {
             if (currency.getCode().equalsIgnoreCase(selectedToCode)) {
                 mConverterView.setSelectedToCurrency(currency);
@@ -146,10 +148,10 @@ public class ConverterPresenter implements ConverterContract.Presenter {
     }
 
     private void saveFromCurrency(Currency currency) {
-        Prefs.getInstance().setFromCurrency(currency);
+        mPrefs.setFromCurrency(currency);
     }
 
     private void saveToCurrency(Currency currency) {
-        Prefs.getInstance().setToCurrency(currency);
+        mPrefs.setToCurrency(currency);
     }
 }
