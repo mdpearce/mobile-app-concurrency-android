@@ -35,4 +35,5 @@
     <string name="currency_usd">US Dollar</string>
     <string name="currency_zar">Rand</string>
     <string name="no_currencies">No currency rates. Please ensure you\'re connected to the internet to fetch them</string>
+    <string name="converter_title">Currency Converter</string>
 </resources>
