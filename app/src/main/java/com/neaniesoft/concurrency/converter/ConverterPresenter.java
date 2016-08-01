@@ -133,13 +133,16 @@ public class ConverterPresenter implements ConverterContract.Presenter {
 
     }
 
-    private void calculate(double amount) {
+    void calculate(double amount) {
         double fromRate = mConverterView.getFromCurrency().getRate();
         double toRate = mConverterView.getToCurrency().getRate();
-
-        double converted = (amount / fromRate) * toRate;
+        double converted = getCalculatedAmount(amount, fromRate, toRate);
         String convertedString = String.format(Locale.getDefault(), "%.2f", converted);
         mConverterView.updateToAmount(convertedString);
+    }
+
+    double getCalculatedAmount(double amount, double fromRate, double toRate) {
+        return (amount / fromRate) * toRate;
     }
 
     @Override

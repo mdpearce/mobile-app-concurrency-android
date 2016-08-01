@@ -74,6 +74,11 @@ public class ConverterPresenterTest {
         when(mPrefs.getFromCurrencyCode()).thenReturn("USD");
         when(mPrefs.getToCurrencyCode()).thenReturn("AUD");
 
+        when(mConverterView.getFromCurrency()).thenReturn(CURRENCIES.get(0));
+        when(mConverterView.getToCurrency()).thenReturn(CURRENCIES.get(1));
+
+        when(mConverterView.getFromText()).thenReturn("1.00");
+
         mConverterPresenter = new ConverterPresenter(mConverterView, mCurrenciesRepository, mPrefs, CURRENCIES_MAP);
     }
 
@@ -139,5 +144,86 @@ public class ConverterPresenterTest {
         testString = "This string has no number";
         result = mConverterPresenter.parseNumberFromString(testString);
         assertEquals(0, result, DELTA);
+    }
+
+    @Test
+    public void updateToTextWhenFromTextChanges() {
+        mConverterPresenter.fromAmountChanged();
+        ArgumentCaptor<String> toAmountArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(mConverterView).updateToAmount(toAmountArgumentCaptor.capture());
+        assertTrue(toAmountArgumentCaptor.getValue().length() > 0);
+    }
+
+    @Test
+    public void saveFromCurrencyWhenChanged() {
+        ArgumentCaptor<Currency> fromCurrencyArgumentCaptor = ArgumentCaptor.forClass(Currency.class);
+        mConverterPresenter.fromCurrencyChanged();
+        verify(mPrefs).setFromCurrency(fromCurrencyArgumentCaptor.capture());
+        assertEquals(CURRENCIES.get(0), fromCurrencyArgumentCaptor.getValue());
+    }
+
+    @Test
+    public void saveToCurrencyWhenChanged() {
+        ArgumentCaptor<Currency> toCurrencyArgumentCaptor = ArgumentCaptor.forClass(Currency.class);
+        mConverterPresenter.toCurrencyChanged();
+        verify(mPrefs).setToCurrency(toCurrencyArgumentCaptor.capture());
+        assertEquals(CURRENCIES.get(1), toCurrencyArgumentCaptor.getValue());
+    }
+
+    @Test
+    public void updateToTextWhenFromCurrencyChanges() {
+        mConverterPresenter.fromCurrencyChanged();
+        ArgumentCaptor<String> toAmountArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(mConverterView).updateToAmount(toAmountArgumentCaptor.capture());
+        assertTrue(toAmountArgumentCaptor.getValue().length() > 0);
+    }
+
+    @Test
+    public void updateToTextWhenToCurrencyChanges() {
+        mConverterPresenter.toCurrencyChanged();
+        ArgumentCaptor<String> toAmountArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(mConverterView).updateToAmount(toAmountArgumentCaptor.capture());
+        assertTrue(toAmountArgumentCaptor.getValue().length() > 0);
+    }
+
+    @Test
+    public void calculateValueGivenRates() {
+        // USD to AUD
+        double input = 1.0;
+        double fromRate = 1.0;
+        double toRate = 1.3302;
+        double output = mConverterPresenter.getCalculatedAmount(input, fromRate, toRate);
+        assertEquals(1.3302, output, DELTA);
+
+        input = 1.5;
+        output = mConverterPresenter.getCalculatedAmount(input, fromRate, toRate);
+        assertEquals(1.9953, output, DELTA);
+
+        input = 0;
+        output = mConverterPresenter.getCalculatedAmount(input, fromRate, toRate);
+        assertEquals(0, output, DELTA);
+
+        input = 250;
+        output = mConverterPresenter.getCalculatedAmount(input, fromRate, toRate);
+        assertEquals(332.55, output, DELTA);
+
+        // EUR to GBP
+        fromRate = 0.89985;
+        toRate = 0.75947;
+        input = 1.0;
+        output = mConverterPresenter.getCalculatedAmount(input, fromRate, toRate);
+        assertEquals(0.8440, output, DELTA);
+
+        input = 1.5;
+        output = mConverterPresenter.getCalculatedAmount(input, fromRate, toRate);
+        assertEquals(1.2660, output, DELTA);
+
+        input = 0;
+        output = mConverterPresenter.getCalculatedAmount(input, fromRate, toRate);
+        assertEquals(0, output, DELTA);
+
+        input = 250;
+        output = mConverterPresenter.getCalculatedAmount(input, fromRate, toRate);
+        assertEquals(210.9991, output, DELTA);
     }
 }

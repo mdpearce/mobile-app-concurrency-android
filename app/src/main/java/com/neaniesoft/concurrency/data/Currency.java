@@ -48,4 +48,12 @@ public class Currency {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "code='" + code + '\'' +
+                ", rate=" + rate +
+                '}';
+    }
 }
