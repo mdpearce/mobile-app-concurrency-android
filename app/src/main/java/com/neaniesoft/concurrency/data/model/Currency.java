@@ -1,4 +1,4 @@
-package com.neaniesoft.concurrency.data;
+package com.neaniesoft.concurrency.data.model;
 
 /**
  * Created by mdpearce on 23/07/2016.

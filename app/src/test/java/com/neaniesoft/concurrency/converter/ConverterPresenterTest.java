@@ -3,7 +3,7 @@ package com.neaniesoft.concurrency.converter;
 import com.neaniesoft.concurrency.Prefs;
 import com.neaniesoft.concurrency.data.CurrenciesDataSource;
 import com.neaniesoft.concurrency.data.CurrenciesRepository;
-import com.neaniesoft.concurrency.data.Currency;
+import com.neaniesoft.concurrency.data.model.Currency;
 
 import org.junit.Before;
 import org.junit.Test;

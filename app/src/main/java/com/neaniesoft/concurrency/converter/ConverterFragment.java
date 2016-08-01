@@ -15,7 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.neaniesoft.concurrency.R;
-import com.neaniesoft.concurrency.data.Currency;
+import com.neaniesoft.concurrency.data.model.Currency;
 
 import java.util.List;
 import java.util.Map;

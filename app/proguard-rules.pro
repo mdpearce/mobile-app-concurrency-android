@@ -79,3 +79,5 @@
 # Fabric/Crashlytics
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
+-keep class com.neaniesoft.concurrency.data.model.** { *; }
+-keep class com.neaniesoft.concurrency.data.remote.FixerIOResponse { *; }

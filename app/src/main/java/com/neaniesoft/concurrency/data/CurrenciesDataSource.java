@@ -2,6 +2,8 @@ package com.neaniesoft.concurrency.data;
 
 import android.support.annotation.NonNull;
 
+import com.neaniesoft.concurrency.data.model.Currency;
+
 import java.util.Date;
 import java.util.List;
 

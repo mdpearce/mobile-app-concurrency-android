@@ -1,6 +1,6 @@
 package com.neaniesoft.concurrency.data.remote;
 
-import com.neaniesoft.concurrency.data.Currency;
+import com.neaniesoft.concurrency.data.model.Currency;
 
 import java.util.List;
 

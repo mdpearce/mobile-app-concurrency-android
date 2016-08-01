@@ -3,7 +3,7 @@ package com.neaniesoft.concurrency;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.neaniesoft.concurrency.data.Currency;
+import com.neaniesoft.concurrency.data.model.Currency;
 
 /**
  * Created by mdpearce on 27/07/2016.

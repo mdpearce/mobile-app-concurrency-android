@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.neaniesoft.concurrency.data.CurrenciesDataSource;
-import com.neaniesoft.concurrency.data.Currency;
+import com.neaniesoft.concurrency.data.model.Currency;
 
 import java.util.Date;
 import java.util.List;

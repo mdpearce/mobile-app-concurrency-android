@@ -2,7 +2,7 @@ package com.neaniesoft.concurrency.converter;
 
 import com.neaniesoft.concurrency.BasePresenter;
 import com.neaniesoft.concurrency.BaseView;
-import com.neaniesoft.concurrency.data.Currency;
+import com.neaniesoft.concurrency.data.model.Currency;
 
 import java.util.List;
 import java.util.Map;

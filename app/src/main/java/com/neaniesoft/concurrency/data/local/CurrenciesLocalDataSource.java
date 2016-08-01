@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import com.neaniesoft.concurrency.data.CurrenciesDataSource;
-import com.neaniesoft.concurrency.data.Currency;
+import com.neaniesoft.concurrency.data.model.Currency;
 
 import java.util.ArrayList;
 import java.util.Date;

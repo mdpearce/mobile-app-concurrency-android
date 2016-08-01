@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.neaniesoft.concurrency.Prefs;
 import com.neaniesoft.concurrency.data.CurrenciesDataSource;
 import com.neaniesoft.concurrency.data.CurrenciesRepository;
-import com.neaniesoft.concurrency.data.Currency;
+import com.neaniesoft.concurrency.data.model.Currency;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
