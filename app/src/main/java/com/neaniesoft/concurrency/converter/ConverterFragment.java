@@ -3,6 +3,7 @@ package com.neaniesoft.concurrency.converter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.neaniesoft.concurrency.R;
 import com.neaniesoft.concurrency.data.Currency;
@@ -143,7 +143,7 @@ public class ConverterFragment extends Fragment implements ConverterContract.Vie
 
     @Override
     public void showNoCurrenciesError() {
-        Toast.makeText(getContext(), "No currencies to convert...", Toast.LENGTH_SHORT).show();
+        Snackbar.make(getView(), R.string.no_currencies, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
